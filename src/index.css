@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --color-ink: 245 247 251;
+  --color-panel: 255 255 255;
+  --color-panel-soft: 238 243 248;
+  --color-line: 197 208 222;
+  --color-cyan: 11 134 143;
+  --color-mint: 18 142 88;
+  --text-strong: #0f172a;
+  --text-soft: #334155;
+  --text-muted: #64748b;
+  --text-faint: #94a3b8;
+  --shadow-glow: 0 24px 80px rgba(30, 41, 59, 0.14);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: rgb(var(--color-ink));
+  color: var(--text-strong);
+}
+
+.dark {
+  color-scheme: dark;
+  --color-ink: 9 17 31;
+  --color-panel: 17 24 39;
+  --color-panel-soft: 23 32 51;
+  --color-line: 39 52 74;
+  --color-cyan: 61 219 217;
+  --color-mint: 82 224 166;
+  --text-strong: #ffffff;
+  --text-soft: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-faint: #475569;
+  --shadow-glow: 0 24px 80px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(circle at 16% -12%, rgb(var(--color-cyan) / 0.14), transparent 30rem),
+    radial-gradient(circle at 92% 4%, rgb(18 142 88 / 0.1), transparent 24rem),
+    rgb(var(--color-ink));
+  margin: 0;
+  min-height: 100vh;
+  overscroll-behavior: none;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.maze-grid {
+  grid-template-columns: repeat(var(--maze-cols), minmax(0, 1fr));
+}
+
+.text-white {
+  color: var(--text-strong) !important;
+}
+
+.text-slate-300 {
+  color: var(--text-soft) !important;
+}
+
+.text-slate-400 {
+  color: var(--text-muted) !important;
+}
+
+.text-slate-600 {
+  color: var(--text-faint) !important;
+}
+
+.bg-slate-950\/40,
+.bg-slate-950\/60,
+.bg-slate-950\/70,
+.bg-slate-950\/80 {
+  background-color: rgb(var(--color-panel-soft) / 0.9) !important;
+}
+
+.dark .bg-slate-950\/40 {
+  background-color: rgb(2 6 23 / 0.4) !important;
+}
+
+.dark .bg-slate-950\/60 {
+  background-color: rgb(2 6 23 / 0.6) !important;
+}
+
+.dark .bg-slate-950\/70 {
+  background-color: rgb(2 6 23 / 0.7) !important;
+}
+
+.dark .bg-slate-950\/80 {
+  background-color: rgb(2 6 23 / 0.8) !important;
+}
