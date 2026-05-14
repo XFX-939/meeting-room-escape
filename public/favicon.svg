@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="会议室逃生">
+  <style>
+    .bg { fill: #09111f; }
+    .panel { fill: #111827; }
+    .line { fill: #2b3a55; }
+    .cyan { fill: #3ddbd9; }
+    .mint { fill: #52e0a6; }
+    .ink { fill: #eef7ff; }
+    @media (prefers-color-scheme: light) {
+      .bg { fill: #f5f7fb; }
+      .panel { fill: #ffffff; }
+      .line { fill: #c5d0de; }
+      .ink { fill: #0f172a; }
+    }
+  </style>
+  <rect class="bg" width="64" height="64" rx="14" />
+  <rect class="panel" x="8" y="8" width="48" height="48" rx="10" />
+  <path class="line" d="M15 16h22v7H22v9h18v7H15V16Zm27 0h7v15h-7V16ZM15 43h16v6H15v-6Zm24-5h10v11H39V38Z" />
+  <path class="cyan" d="M18 34h18v-8h7v15H18v-7Z" />
+  <path class="mint" d="M45 33l8 7-8 7v-5H34v-4h11v-5Z" />
+  <circle class="ink" cx="24" cy="24" r="4" />
+  <rect class="ink" x="21" y="29" width="6" height="10" rx="3" />
+</svg>
