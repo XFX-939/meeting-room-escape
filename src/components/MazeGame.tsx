@@ -34,6 +34,7 @@ type MazeGameProps = {
 const normalMoveMs = 180;
 const slowMoveMs = 360;
 const fastMoveMs = 105;
+const autoAdvanceDelaySeconds = 3;
 
 export function MazeGame({
   level,
@@ -57,6 +58,7 @@ export function MazeGame({
   const [message, setMessage] = useState("方向键或 WASD 移动，找到电梯口。");
   const [submitted, setSubmitted] = useState(false);
   const [playerName, setPlayerName] = useState(() => getSavedPlayerName());
+  const [autoAdvanceSeconds, setAutoAdvanceSeconds] = useState<number | null>(null);
   const lastMoveAt = useRef(0);
   const effectTimer = useRef<number | null>(null);
   const start = useMemo(() => getStart(level), [level]);
@@ -101,6 +103,7 @@ export function MazeGame({
     setEffect("normal");
     setMessage("方向键或 WASD 移动，找到电梯口。");
     setSubmitted(false);
+    setAutoAdvanceSeconds(null);
     lastMoveAt.current = 0;
     if (effectTimer.current) {
       window.clearTimeout(effectTimer.current);
@@ -133,6 +136,34 @@ export function MazeGame({
 
     return () => window.clearInterval(timer);
   }, [status]);
+
+  useEffect(() => {
+    if (status !== "cleared") {
+      setAutoAdvanceSeconds(null);
+      return undefined;
+    }
+
+    if (level.id >= 10) {
+      setAutoAdvanceSeconds(null);
+      return undefined;
+    }
+
+    setAutoAdvanceSeconds(autoAdvanceDelaySeconds);
+    const countdownTimer = window.setInterval(() => {
+      setAutoAdvanceSeconds((current) => {
+        if (current === null) return current;
+        return Math.max(1, current - 1);
+      });
+    }, 1000);
+    const advanceTimer = window.setTimeout(() => {
+      onNextLevel(level.id + 1);
+    }, autoAdvanceDelaySeconds * 1000);
+
+    return () => {
+      window.clearInterval(countdownTimer);
+      window.clearTimeout(advanceTimer);
+    };
+  }, [level.id, onNextLevel, status]);
 
   const applyTimedEffect = useCallback((nextEffect: "fast" | "slow", durationMs: number) => {
     setEffect(nextEffect);
@@ -420,6 +451,48 @@ export function MazeGame({
           <Leaderboard compact entries={leaderboardEntries} />
         </aside>
       </div>
+
+      {status === "cleared" && (
+        <div className="fixed inset-0 z-40 grid place-items-center bg-slate-950/65 px-4 backdrop-blur-sm">
+          <section
+            aria-live="polite"
+            className="w-full max-w-md rounded-3xl border border-line bg-panel p-6 text-center shadow-glow"
+            role="dialog"
+          >
+            <p className="text-sm font-black uppercase tracking-normal text-cyan">
+              {level.id >= 10 ? "Mission Complete" : "Level Clear"}
+            </p>
+            <h2 className="mt-3 text-3xl font-black text-white">
+              {level.id >= 10 ? "恭喜，全部通关！" : `恭喜通过第 ${level.id} 关`}
+            </h2>
+            <p className="mt-3 leading-7 text-slate-300">
+              本关得分 <strong className="text-mint">{stats.score}</strong>，用时 {stats.elapsedTimeSeconds} 秒。
+            </p>
+            {level.id < 10 ? (
+              <>
+                <p className="mt-2 text-slate-400">
+                  {autoAdvanceSeconds ?? autoAdvanceDelaySeconds} 秒后自动进入第 {level.id + 1} 关。
+                </p>
+                <button
+                  className="mt-6 h-12 w-full rounded-xl bg-cyan font-black text-slate-950"
+                  onClick={() => onNextLevel(level.id + 1)}
+                  type="button"
+                >
+                  立即进入下一关
+                </button>
+              </>
+            ) : (
+              <button
+                className="mt-6 h-12 w-full rounded-xl bg-mint font-black text-slate-950"
+                onClick={onSelectLevel}
+                type="button"
+              >
+                返回关卡选择
+              </button>
+            )}
+          </section>
+        </div>
+      )}
     </main>
   );
 }
